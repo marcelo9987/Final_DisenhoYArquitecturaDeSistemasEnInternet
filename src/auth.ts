@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import {USER_COLLECTION} from "./utils";
+import {TRAINER_COLLECTION} from "./utils";
 import {ObjectId} from "mongodb";
 import {getDB} from "./db/db";
 
@@ -32,7 +32,7 @@ export const verifyToken = (token: string) =>
     }
 }
 
-export const getUserFromToken =  async (token: string) =>
+export const getTrainerFromToken =  async (token: string) =>
 {
     const payload = verifyToken(token);
     if (!payload)
@@ -40,6 +40,6 @@ export const getUserFromToken =  async (token: string) =>
         return null;
     }
     const db = getDB();
-    return await db.collection(USER_COLLECTION).findOne({_id: new ObjectId(payload.userID)});
+    return await db.collection(TRAINER_COLLECTION).findOne({_id: new ObjectId(payload.userID)});
 };
 
