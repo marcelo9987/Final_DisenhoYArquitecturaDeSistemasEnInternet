@@ -120,7 +120,7 @@ export const catchPokemon: (pokemonId: string, nickname: string, userId: string)
     }
 
     await db.collection(TRAINER_COLLECTION)
-            .updateOne({_id: new ObjectId(userId)}, {$addToSet: {pokemons: pokemonSubido}});
+            .updateOne({_id: new ObjectId(userId)}, {$addToSet: {pokemons: resultadoSubida.insertedId.toString()}});
     return pokemonSubido;
 
 };
@@ -128,23 +128,17 @@ export const catchPokemon: (pokemonId: string, nickname: string, userId: string)
 export const liberarPokemon = async (id_pokemon: string, trainerId: string, pokemones: string[]) =>
 {
 
-    const exists = await obtenerPokemonPorId(id_pokemon);
+    const exists = await getDB().collection(OWNED_POKEMON_COLLECTION).findOne({_id: new ObjectId(id_pokemon)});
     if (!exists) throw new Error("Ese pokemon no existe");
 
-    const newPokemons = pokemones.filter((x: string) => {
-        id_pokemon!==x;
-    });
+    const newPokemons = pokemones.filter((x: string) => x !== id_pokemon);
 
     await getDB().collection(TRAINER_COLLECTION).updateOne({ _id: new ObjectId(trainerId) }, {
         $set: { pokemons: newPokemons }
     });
 
-    await getDB().collection(POKEMON_COLLECTION).deleteOne({ _id: new ObjectId(id_pokemon) });
+    // Eliminar el pokemon de la lista de pokemons que SON DE PROPIEDAD
+    await getDB().collection(OWNED_POKEMON_COLLECTION).deleteOne({ _id: new ObjectId(id_pokemon) });
 
     return await getDB().collection<Trainer>(TRAINER_COLLECTION).findOne({ _id: new ObjectId(trainerId) })
 };
-
-
-
-
-
