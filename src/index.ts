@@ -1,3 +1,11 @@
+//index.ts
+export * from "./core/context";
+export * from "./core/assertions";
+export * from "./scenario/step";
+export * from "./scenario/scenario";
+export * from "./core/engine";
+
+
 import {connectToMongo} from "./db/db";
 import {ApolloServer} from "apollo-server";
 import {typeDefs} from "./graphql/schema";
@@ -24,7 +32,10 @@ const start = async () =>
     console.log('Servidor iniciado en http://localhost:',K_PUERTO);
 }
 
-start().catch(err =>
-{
-    console.error('Error al iniciar el servidor:', err);
-});
+
+if (require.main === module) {
+    start().catch(err => {
+        console.error('Error al iniciar el servidor:', err);
+    });
+}
+

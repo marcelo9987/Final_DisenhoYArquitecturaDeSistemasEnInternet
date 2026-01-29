@@ -4,7 +4,7 @@ export type OwnedPokemon = {
     _id?: ObjectId
     // #En base datos se guardará solo el id, encadenado pokemon.
     pokemon: string
-    nickname: String
+    nickname: string
     attack: number
     defense: number
     speed: number

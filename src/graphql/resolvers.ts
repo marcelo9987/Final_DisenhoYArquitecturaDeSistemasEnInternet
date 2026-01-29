@@ -10,7 +10,6 @@ import {signToken} from "../auth";
 import {Pokemon} from "../types/Pokemon";
 import {getOwnedPokemons, getPokemons, introducirNuevoPokemon, obtenerPokemonPorId} from "../collections/pokemons";
 import {OwnedPokemon} from "../types/OwnedPokemon";
-import {Trainer} from "../types/Trainer";
 
 const checkContext = (contexto: any, razon: string) =>
 {
@@ -39,13 +38,14 @@ export const resolvers: IResolvers =
             },
         },
 
-        // Trainer:
-        //     {
-        //         pokemons:async(parent,__,___)=>
-        //         {
-        //             return await getOwnedPokemons(parent.pokemons);
-        //         },
-        //     },
+
+        Trainer:
+            {
+                pokemons: async (parent, _, __) =>
+                {
+                    return await getOwnedPokemons(parent.pokemons);
+                }
+            },
 
         OwnedPokemon:
             {
